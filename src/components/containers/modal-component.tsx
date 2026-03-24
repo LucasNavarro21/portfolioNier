@@ -6,7 +6,8 @@ type ContentItem =
   | { type: "meta"; items: string[] }
   | { type: "link"; text: string; href: string; inline?: string }
   | { type: "links"; items: { icon: "play" | "demo" | "github"; href: string }[] }
-  | { type: "bullet"; text: string };
+  | { type: "bullet"; text: string }
+  | { type: "education"; title: string; institution: string; date: string };
 
 interface ModalProps {
   card: {
@@ -51,6 +52,48 @@ export default function ModalComponent({ card, onClose }: ModalProps) {
         >
           {item.text}
         </span>
+      );
+    }
+ if (item.type === "education") {
+      return (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.25rem",
+            paddingLeft: "0.75rem",
+            borderLeft: "1.5px solid #8a8470",
+          }}
+        >
+          <span
+            style={{
+              color: "#e8e2ce",
+              fontSize: "18px",
+              letterSpacing: "0.08em",
+            }}
+          >
+            {item.title}
+          </span>
+          <span
+            style={{
+              color: "#c8c3aa",
+              fontSize: "14px",
+              letterSpacing: "0.15em",
+            }}
+          >
+            {item.institution}
+          </span>
+          <span
+            style={{
+              color: "#c8c3aa",
+              fontSize: "14px",
+              letterSpacing: "0.2em",
+            }}
+          >
+            {item.date}
+          </span>
+        </div>
       );
     }
 

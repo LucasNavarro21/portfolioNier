@@ -7,7 +7,8 @@ type ContentItem =
   | { type: "meta"; items: string[] }
   | { type: "link"; text: string; href: string; inline?: string }
   | { type: "links"; items: { icon: "play" | "demo" | "github"; href: string }[] }
-  | { type: "bullet"; text: string };
+  | { type: "bullet"; text: string }
+  | { type: "education"; title: string; institution: string; date: string };
 
 const cards = [
   {
@@ -97,7 +98,7 @@ const modalData: Record<string, { number: string; title: string; content: Conten
     { type: "meta", items: ["Fundación Formar", "2026"] },
     { type: "bullet", text: "Plataforma interna de reconocimiento para equipos de desarrollo orientada a visibilizar logros y buenas prácticas alineadas a la cultura organizacional." },
     { type: "bullet", text: "Permite la gestión de feedback positivo entre desarrolladores, QAs y líderes técnicos, facilitando el seguimiento de métricas de desempeño y el fortalecimiento de la motivación en múltiples squads." },
-    { type: "meta", items: ["Tecnologías: NextJs, Tailwind"] },
+    { type: "meta", items: ["Tecnologías: NextJs, Tailwind, Express, TypeORM, PostgreSQL, Typescript, Docker, Storybook, Vitest"] },
 
     { type: "headingWithLinks", text: "App de Pedidos de Comida", items: [
       { icon: "github", href: "https://github.com/LucasNavarro21/PFinalComidaApp" },
@@ -106,7 +107,7 @@ const modalData: Record<string, { number: string; title: string; content: Conten
     { type: "bullet", text: "Aplicación web full-stack para la gestión de pedidos de comida con control de acceso basado en roles y flujos diferenciados para cada tipo de usuario." },
     { type: "bullet", text: "Incluye registro, autenticación, administración de restaurantes, manejo de productos y proceso de compra completo para clientes." },
     { type: "bullet", text: "Desarrollé toda la arquitectura del proyecto: backend con servicios, controladores y entidades tipadas; frontend con UI dinámica, rutas protegidas, carrito persistente y vistas específicas para cada rol." },
-    { type: "meta", items: ["Tecnologías: React, Express"] },
+    { type: "meta", items: ["Tecnologías:  React, Express, TypeORM, Docker, Storybook, PostgreSQL,Vitest, Typescript, Node."] },
 
     { type: "headingWithLinks", text: "P2P File Transfer App", items: [
       { icon: "play", href: "https://drive.google.com/file/d/17vdV5ukoclAuF5CdiVVv4BCwqJkhfqEF/view?usp=drive_link" },
@@ -115,7 +116,7 @@ const modalData: Record<string, { number: string; title: string; content: Conten
     { type: "meta", items: ["Full Stack Internship", "Nuclea Solutions", "2025"] },
     { type: "bullet", text: "Aplicación web que permite la transferencia de archivos directamente entre usuarios mediante tecnología peer-to-peer, iniciando el proceso con WebSocket para la señalización y estableciendo una conexión WebRTC para el envío seguro y eficiente de archivos sin pasar por servidores intermedios." },
     { type: "bullet", text: "Diseñé y desarrollé toda la solución, incluyendo la lógica de conexión, validación de salas mediante códigos únicos y la interfaz de usuario utilizando Flutter Web." },
-    { type: "meta", items: ["Tecnologías: Dart, Flutter Web, WebRTC, WebSocket, HTML5, JavaScript, Railway, Firebase"] },
+    { type: "meta", items: ["Tecnologías: Dart, Flutter Web, WebRTC, WebSocket, HTML5, JavaScript (signaling), Railway (hosting), Firebase (autenticación y control de estado) "] },
   ],
 },
   "03": {
@@ -131,15 +132,21 @@ const modalData: Record<string, { number: string; title: string; content: Conten
     { type: "bullet", text: "Gestión del tiempo, Capacidad de aprendizaje continuo, Adaptabilidad, Perseverancia, Iniciativa, Orientación a resultados." },
   ],
 },
-  "04": {
-    number: "04",
-    title: "Educación",
-    content: [
-      { type: "bullet", text: "Carrera — Universidad (año - año)" },
-      { type: "bullet", text: "Curso o certificación relevante" },
-      { type: "bullet", text: "Otro estudio o formación" },
-    ],
-  },
+"04": {
+  number: "04",
+  title: "Educación",
+  content: [
+    { type: "heading", text: "Educación Formal" },
+    { type: "education", title: "Tecnicatura Superior en Análisis de Sistemas", institution: "Instituto de Educación Superior Juan Amos Comenio", date: "2022 — 2024" },
+    { type: "education", title: "Bachillerato en Informática", institution: "Escuela Cristiana Evangélica Argentina", date: "2015 — 2020" },
+    { type: "heading", text: "Cursos" },
+    { type: "education", title: "Academia ForIt", institution: "Fundación Formar", date: "2025" },
+    { type: "education", title: "Curso de Typescript", institution: "IEEE ITBA", date: "2025" },
+    { type: "education", title: "Desarrollo Backend", institution: "Oracle", date: "2024" },
+    { type: "education", title: "Consultas Básicas", institution: "Desafío Latam", date: "2023" },
+    { type: "education", title: "Desarrollo Web | Javascript | ReactJs", institution: "CoderHouse", date: "2021" },
+  ],
+},
 };
 
 export default function NierCards() {
