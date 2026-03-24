@@ -2,8 +2,10 @@ import { useEffect, useRef } from "react";
 
 type ContentItem =
   | { type: "heading"; text: string }
+  | { type: "headingWithLinks"; text: string; items: { icon: "play" | "demo" | "github"; href: string }[] }
   | { type: "meta"; items: string[] }
   | { type: "link"; text: string; href: string; inline?: string }
+  | { type: "links"; items: { icon: "play" | "demo" | "github"; href: string }[] }
   | { type: "bullet"; text: string };
 
 interface ModalProps {
@@ -32,6 +34,7 @@ export default function ModalComponent({ card, onClose }: ModalProps) {
 
   let bulletIndex = 0;
 
+
   const renderItem = (item: ContentItem, i: number) => {
     if (item.type === "heading") {
       return (
@@ -48,6 +51,139 @@ export default function ModalComponent({ card, onClose }: ModalProps) {
         >
           {item.text}
         </span>
+      );
+    }
+
+    if (item.type === "headingWithLinks") {
+      return (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            marginTop: i > 0 ? "0.5rem" : 0,
+          }}
+        >
+          <span
+            style={{
+              color: "#e8e2ce",
+              fontSize: "25px",
+              textTransform: "uppercase" as const,
+              letterSpacing: "0.12em",
+            }}
+          >
+            {item.text}
+          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            {item.items.map((link, j) => (
+              <a
+                key={j}
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                  color: "#c8c3aa",
+                  fontSize: "11px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  border: "1px solid #8a8470",
+                  padding: "4px 10px",
+                  transition: "all 0.15s ease",
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#c8c3aa";
+                  (e.currentTarget as HTMLAnchorElement).style.color = "#3d3b34";
+                  (e.currentTarget as HTMLAnchorElement).style.borderColor = "#c8c3aa";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent";
+                  (e.currentTarget as HTMLAnchorElement).style.color = "#c8c3aa";
+                  (e.currentTarget as HTMLAnchorElement).style.borderColor = "#8a8470";
+                }}
+              >
+                {link.icon === "play" && (
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                    <polygon points="2,1 9,5 2,9"/>
+                  </svg>
+                )}
+                {link.icon === "demo" && (
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.2">
+                    <rect x="1" y="2" width="8" height="6"/>
+                    <line x1="3" y1="8" x2="7" y2="8"/>
+                    <line x1="5" y1="8" x2="5" y2="9.5"/>
+                  </svg>
+                )}
+                {link.icon === "github" && (
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                    <path d="M5 0.5C2.5 0.5 0.5 2.5 0.5 5c0 2 1.3 3.7 3.1 4.3.2 0 .3-.1.3-.3V8.4c-1.2.3-1.5-.6-1.5-.6-.2-.5-.5-.7-.5-.7-.4-.3 0-.3 0-.3.4 0 .7.4.7.4.4.7 1 .5 1.3.4 0-.3.2-.5.3-.6-1-.1-2-.5-2-2.2 0-.5.2-.9.4-1.2 0-.1-.2-.6 0-1.2 0 0 .4-.1 1.2.4.4-.1.7-.1 1.1-.1.4 0 .7 0 1.1.1.8-.5 1.2-.4 1.2-.4.2.6 0 1.1 0 1.2.3.3.4.7.4 1.2 0 1.7-1 2.1-2 2.2.2.1.3.4.3.8v1.2c0 .2.1.3.3.3C8.2 8.7 9.5 7 9.5 5 9.5 2.5 7.5.5 5 .5z"/>
+                  </svg>
+                )}
+                {link.icon === "play" ? "Video" : link.icon === "demo" ? "Demo" : "Github"}
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    }
+if (item.type === "links") {
+      return (
+        <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+          {item.items.map((link, j) => (
+            <a
+              key={j}
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                color: "#c8c3aa",
+                fontSize: "11px",
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                textDecoration: "none",
+                border: "1px solid #8a8470",
+                padding: "4px 10px",
+                transition: "all 0.15s ease",
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#c8c3aa";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#3d3b34";
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = "#c8c3aa";
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#c8c3aa";
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = "#8a8470";
+              }}
+            >
+              {link.icon === "play" && (
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                  <polygon points="2,1 9,5 2,9"/>
+                </svg>
+              )}
+              {link.icon === "demo" && (
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.2">
+                  <rect x="1" y="2" width="8" height="6"/>
+                  <line x1="3" y1="8" x2="7" y2="8"/>
+                  <line x1="5" y1="8" x2="5" y2="9.5"/>
+                </svg>
+              )}
+              {link.icon === "github" && (
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
+                  <path d="M5 0.5C2.5 0.5 0.5 2.5 0.5 5c0 2 1.3 3.7 3.1 4.3.2 0 .3-.1.3-.3V8.4c-1.2.3-1.5-.6-1.5-.6-.2-.5-.5-.7-.5-.7-.4-.3 0-.3 0-.3.4 0 .7.4.7.4.4.7 1 .5 1.3.4 0-.3.2-.5.3-.6-1-.1-2-.5-2-2.2 0-.5.2-.9.4-1.2 0-.1-.2-.6 0-1.2 0 0 .4-.1 1.2.4.4-.1.7-.1 1.1-.1.4 0 .7 0 1.1.1.8-.5 1.2-.4 1.2-.4.2.6 0 1.1 0 1.2.3.3.4.7.4 1.2 0 1.7-1 2.1-2 2.2.2.1.3.4.3.8v1.2c0 .2.1.3.3.3C8.2 8.7 9.5 7 9.5 5 9.5 2.5 7.5.5 5 .5z"/>
+                </svg>
+              )}
+              {link.icon === "play" ? "Video" : link.icon === "demo" ? "Demo" : "Github"}
+            </a>
+          ))}
+        </div>
       );
     }
 

@@ -3,8 +3,10 @@ import ModalComponent from "./modal-component";
 
 type ContentItem =
   | { type: "heading"; text: string }
+  | { type: "headingWithLinks"; text: string; items: { icon: "play" | "demo" | "github"; href: string }[] }
   | { type: "meta"; items: string[] }
   | { type: "link"; text: string; href: string; inline?: string }
+  | { type: "links"; items: { icon: "play" | "demo" | "github"; href: string }[] }
   | { type: "bullet"; text: string };
 
 const cards = [
@@ -85,14 +87,37 @@ const modalData: Record<string, { number: string; title: string; content: Conten
     ],
   },
   "02": {
-    number: "02",
-    title: "Proyectos",
-    content: [
-      { type: "bullet", text: "Proyecto A — descripción breve" },
-      { type: "bullet", text: "Proyecto B — descripción breve" },
-      { type: "bullet", text: "Proyecto C — descripción breve" },
-    ],
-  },
+  number: "02",
+  title: "Proyectos",
+  content: [
+    { type: "headingWithLinks", text: "App de Reconocimiento ForIT", items: [
+      { icon: "play", href: "https://drive.google.com/file/d/1xLtEU4ZO81ZnEd34qv2iFQSDYQ7LemZx/view?usp=drive_link" },
+      { icon: "demo", href: "https://recognitions-app-1.onrender.com/" },
+    ]},
+    { type: "meta", items: ["Fundación Formar", "2026"] },
+    { type: "bullet", text: "Plataforma interna de reconocimiento para equipos de desarrollo orientada a visibilizar logros y buenas prácticas alineadas a la cultura organizacional." },
+    { type: "bullet", text: "Permite la gestión de feedback positivo entre desarrolladores, QAs y líderes técnicos, facilitando el seguimiento de métricas de desempeño y el fortalecimiento de la motivación en múltiples squads." },
+    { type: "meta", items: ["Tecnologías: NextJs, Tailwind"] },
+
+    { type: "headingWithLinks", text: "App de Pedidos de Comida", items: [
+      { icon: "github", href: "https://github.com/LucasNavarro21/PFinalComidaApp" },
+    ]},
+    { type: "meta", items: ["Fundación Formar", "2025"] },
+    { type: "bullet", text: "Aplicación web full-stack para la gestión de pedidos de comida con control de acceso basado en roles y flujos diferenciados para cada tipo de usuario." },
+    { type: "bullet", text: "Incluye registro, autenticación, administración de restaurantes, manejo de productos y proceso de compra completo para clientes." },
+    { type: "bullet", text: "Desarrollé toda la arquitectura del proyecto: backend con servicios, controladores y entidades tipadas; frontend con UI dinámica, rutas protegidas, carrito persistente y vistas específicas para cada rol." },
+    { type: "meta", items: ["Tecnologías: React, Express"] },
+
+    { type: "headingWithLinks", text: "P2P File Transfer App", items: [
+      { icon: "play", href: "https://drive.google.com/file/d/17vdV5ukoclAuF5CdiVVv4BCwqJkhfqEF/view?usp=drive_link" },
+      { icon: "demo", href: "https://pair-drop-codigo-jc9xfs.flutterflow.app/" },
+    ]},
+    { type: "meta", items: ["Full Stack Internship", "Nuclea Solutions", "2025"] },
+    { type: "bullet", text: "Aplicación web que permite la transferencia de archivos directamente entre usuarios mediante tecnología peer-to-peer, iniciando el proceso con WebSocket para la señalización y estableciendo una conexión WebRTC para el envío seguro y eficiente de archivos sin pasar por servidores intermedios." },
+    { type: "bullet", text: "Diseñé y desarrollé toda la solución, incluyendo la lógica de conexión, validación de salas mediante códigos únicos y la interfaz de usuario utilizando Flutter Web." },
+    { type: "meta", items: ["Tecnologías: Dart, Flutter Web, WebRTC, WebSocket, HTML5, JavaScript, Railway, Firebase"] },
+  ],
+},
   "03": {
     number: "03",
     title: "Skills",
