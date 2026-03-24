@@ -119,14 +119,18 @@ const modalData: Record<string, { number: string; title: string; content: Conten
   ],
 },
   "03": {
-    number: "03",
-    title: "Skills",
-    content: [
-      { type: "bullet", text: "Frontend: React, TypeScript, Tailwind" },
-      { type: "bullet", text: "Backend: Node.js, Express, PostgreSQL" },
-      { type: "bullet", text: "Tools: Git, Docker, Figma" },
-    ],
-  },
+  number: "03",
+  title: "Skills",
+  content: [
+    { type: "heading", text: "Habilidades Técnicas" },
+    { type: "bullet", text: "Frontend: ReactJs, NextJs, Javascript, Typescript, CSS, Flutterflow." },
+    { type: "bullet", text: "Backend: PHP, Java, Python, .Net, Express, Prisma, MySQL, MongoDB, Firebase." },
+    { type: "bullet", text: "Herramientas: Git, Github, Postman, Docker, AWS, Vitest, Storybook, Cypress." },
+    { type: "bullet", text: "Otros: SCRUM, Trello, Excel, Word." },
+    { type: "heading", text: "Habilidades Blandas" },
+    { type: "bullet", text: "Gestión del tiempo, Capacidad de aprendizaje continuo, Adaptabilidad, Perseverancia, Iniciativa, Orientación a resultados." },
+  ],
+},
   "04": {
     number: "04",
     title: "Educación",
