@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import ModalComponent from "./modal-component";
 
 type ContentItem =
@@ -65,7 +65,7 @@ const cards = [
 ];
 
 const modalData: Record<string, { number: string; title: string; content: ContentItem[] }> = {
-"01": {
+  "01": {
     number: "01",
     title: "Experiencia",
     content: [
@@ -88,70 +88,85 @@ const modalData: Record<string, { number: string; title: string; content: Conten
     ],
   },
   "02": {
-  number: "02",
-  title: "Proyectos",
-  content: [
-    { type: "headingWithLinks", text: "App de Reconocimiento ForIT", items: [
-      { icon: "play", href: "https://drive.google.com/file/d/1xLtEU4ZO81ZnEd34qv2iFQSDYQ7LemZx/view?usp=drive_link" },
-      { icon: "demo", href: "https://recognitions-app-1.onrender.com/" },
-    ]},
-    { type: "meta", items: ["Fundación Formar", "2026"] },
-    { type: "bullet", text: "Plataforma interna de reconocimiento para equipos de desarrollo orientada a visibilizar logros y buenas prácticas alineadas a la cultura organizacional." },
-    { type: "bullet", text: "Permite la gestión de feedback positivo entre desarrolladores, QAs y líderes técnicos, facilitando el seguimiento de métricas de desempeño y el fortalecimiento de la motivación en múltiples squads." },
-    { type: "meta", items: ["Tecnologías: NextJs, Tailwind, Express, TypeORM, PostgreSQL, Typescript, Docker, Storybook, Vitest"] },
-
-    { type: "headingWithLinks", text: "App de Pedidos de Comida", items: [
-      { icon: "github", href: "https://github.com/LucasNavarro21/PFinalComidaApp" },
-    ]},
-    { type: "meta", items: ["Fundación Formar", "2025"] },
-    { type: "bullet", text: "Aplicación web full-stack para la gestión de pedidos de comida con control de acceso basado en roles y flujos diferenciados para cada tipo de usuario." },
-    { type: "bullet", text: "Incluye registro, autenticación, administración de restaurantes, manejo de productos y proceso de compra completo para clientes." },
-    { type: "bullet", text: "Desarrollé toda la arquitectura del proyecto: backend con servicios, controladores y entidades tipadas; frontend con UI dinámica, rutas protegidas, carrito persistente y vistas específicas para cada rol." },
-    { type: "meta", items: ["Tecnologías:  React, Express, TypeORM, Docker, Storybook, PostgreSQL,Vitest, Typescript, Node."] },
-
-    { type: "headingWithLinks", text: "P2P File Transfer App", items: [
-      { icon: "play", href: "https://drive.google.com/file/d/17vdV5ukoclAuF5CdiVVv4BCwqJkhfqEF/view?usp=drive_link" },
-      { icon: "demo", href: "https://pair-drop-codigo-jc9xfs.flutterflow.app/" },
-    ]},
-    { type: "meta", items: ["Full Stack Internship", "Nuclea Solutions", "2025"] },
-    { type: "bullet", text: "Aplicación web que permite la transferencia de archivos directamente entre usuarios mediante tecnología peer-to-peer, iniciando el proceso con WebSocket para la señalización y estableciendo una conexión WebRTC para el envío seguro y eficiente de archivos sin pasar por servidores intermedios." },
-    { type: "bullet", text: "Diseñé y desarrollé toda la solución, incluyendo la lógica de conexión, validación de salas mediante códigos únicos y la interfaz de usuario utilizando Flutter Web." },
-    { type: "meta", items: ["Tecnologías: Dart, Flutter Web, WebRTC, WebSocket, HTML5, JavaScript (signaling), Railway (hosting), Firebase (autenticación y control de estado) "] },
-  ],
-},
+    number: "02",
+    title: "Proyectos",
+    content: [
+      { type: "headingWithLinks", text: "App de Reconocimiento ForIT", items: [
+        { icon: "play", href: "https://drive.google.com/file/d/1xLtEU4ZO81ZnEd34qv2iFQSDYQ7LemZx/view?usp=drive_link" },
+        { icon: "demo", href: "https://recognitions-app-1.onrender.com/" },
+      ]},
+      { type: "meta", items: ["Fundación Formar", "2026"] },
+      { type: "bullet", text: "Plataforma interna de reconocimiento para equipos de desarrollo orientada a visibilizar logros y buenas prácticas alineadas a la cultura organizacional." },
+      { type: "bullet", text: "Permite la gestión de feedback positivo entre desarrolladores, QAs y líderes técnicos, facilitando el seguimiento de métricas de desempeño y el fortalecimiento de la motivación en múltiples squads." },
+      { type: "meta", items: ["Tecnologías: NextJs, Tailwind, Express, TypeORM, PostgreSQL, Typescript, Docker, Storybook, Vitest"] },
+      { type: "headingWithLinks", text: "App de Pedidos de Comida", items: [
+        { icon: "github", href: "https://github.com/LucasNavarro21/PFinalComidaApp" },
+      ]},
+      { type: "meta", items: ["Fundación Formar", "2025"] },
+      { type: "bullet", text: "Aplicación web full-stack para la gestión de pedidos de comida con control de acceso basado en roles y flujos diferenciados para cada tipo de usuario." },
+      { type: "bullet", text: "Incluye registro, autenticación, administración de restaurantes, manejo de productos y proceso de compra completo para clientes." },
+      { type: "bullet", text: "Desarrollé toda la arquitectura del proyecto: backend con servicios, controladores y entidades tipadas; frontend con UI dinámica, rutas protegidas, carrito persistente y vistas específicas para cada rol." },
+      { type: "meta", items: ["Tecnologías: React, Express, TypeORM, Docker, Storybook, PostgreSQL, Vitest, Typescript, Node."] },
+      { type: "headingWithLinks", text: "P2P File Transfer App", items: [
+        { icon: "play", href: "https://drive.google.com/file/d/17vdV5ukoclAuF5CdiVVv4BCwqJkhfqEF/view?usp=drive_link" },
+        { icon: "demo", href: "https://pair-drop-codigo-jc9xfs.flutterflow.app/" },
+      ]},
+      { type: "meta", items: ["Full Stack Internship", "Nuclea Solutions", "2025"] },
+      { type: "bullet", text: "Aplicación web que permite la transferencia de archivos directamente entre usuarios mediante tecnología peer-to-peer, iniciando el proceso con WebSocket para la señalización y estableciendo una conexión WebRTC para el envío seguro y eficiente de archivos sin pasar por servidores intermedios." },
+      { type: "bullet", text: "Diseñé y desarrollé toda la solución, incluyendo la lógica de conexión, validación de salas mediante códigos únicos y la interfaz de usuario utilizando Flutter Web." },
+      { type: "meta", items: ["Tecnologías: Dart, Flutter Web, WebRTC, WebSocket, HTML5, JavaScript, Railway, Firebase"] },
+    ],
+  },
   "03": {
-  number: "03",
-  title: "Skills",
-  content: [
-    { type: "heading", text: "Habilidades Técnicas" },
-    { type: "bullet", text: "Frontend: ReactJs, NextJs, Javascript, Typescript, CSS, Flutterflow." },
-    { type: "bullet", text: "Backend: PHP, Java, Python, .Net, Express, Prisma, MySQL, MongoDB, Firebase." },
-    { type: "bullet", text: "Herramientas: Git, Github, Postman, Docker, AWS, Vitest, Storybook, Cypress." },
-    { type: "bullet", text: "Otros: SCRUM, Trello, Excel, Word." },
-    { type: "heading", text: "Habilidades Blandas" },
-    { type: "bullet", text: "Gestión del tiempo, Capacidad de aprendizaje continuo, Adaptabilidad, Perseverancia, Iniciativa, Orientación a resultados." },
-  ],
-},
-"04": {
-  number: "04",
-  title: "Educación",
-  content: [
-    { type: "heading", text: "Educación Formal" },
-    { type: "education", title: "Tecnicatura Superior en Análisis de Sistemas", institution: "Instituto de Educación Superior Juan Amos Comenio", date: "2022 — 2024" },
-    { type: "education", title: "Bachillerato en Informática", institution: "Escuela Cristiana Evangélica Argentina", date: "2015 — 2020" },
-    { type: "heading", text: "Cursos" },
-    { type: "education", title: "Academia ForIt", institution: "Fundación Formar", date: "2025" },
-    { type: "education", title: "Curso de Typescript", institution: "IEEE ITBA", date: "2025" },
-    { type: "education", title: "Desarrollo Backend", institution: "Oracle", date: "2024" },
-    { type: "education", title: "Consultas Básicas", institution: "Desafío Latam", date: "2023" },
-    { type: "education", title: "Desarrollo Web | Javascript | ReactJs", institution: "CoderHouse", date: "2021" },
-  ],
-},
+    number: "03",
+    title: "Skills",
+    content: [
+      { type: "heading", text: "Habilidades Técnicas" },
+      { type: "bullet", text: "Frontend: ReactJs, NextJs, Javascript, Typescript, CSS, Flutterflow." },
+      { type: "bullet", text: "Backend: PHP, Java, Python, .Net, Express, Prisma, MySQL, MongoDB, Firebase." },
+      { type: "bullet", text: "Herramientas: Git, Github, Postman, Docker, AWS, Vitest, Storybook, Cypress." },
+      { type: "bullet", text: "Otros: SCRUM, Trello, Excel, Word." },
+      { type: "heading", text: "Habilidades Blandas" },
+      { type: "bullet", text: "Gestión del tiempo, Capacidad de aprendizaje continuo, Adaptabilidad, Perseverancia, Iniciativa, Orientación a resultados." },
+    ],
+  },
+  "04": {
+    number: "04",
+    title: "Educación",
+    content: [
+      { type: "heading", text: "Educación Formal" },
+      { type: "education", title: "Tecnicatura Superior en Análisis de Sistemas", institution: "Instituto de Educación Superior Juan Amos Comenio", date: "2022 — 2024" },
+      { type: "education", title: "Bachillerato en Informática", institution: "Escuela Cristiana Evangélica Argentina", date: "2015 — 2020" },
+      { type: "heading", text: "Cursos" },
+      { type: "education", title: "Academia ForIt", institution: "Fundación Formar", date: "2025" },
+      { type: "education", title: "Curso de Typescript", institution: "IEEE ITBA", date: "2025" },
+      { type: "education", title: "Desarrollo Backend", institution: "Oracle", date: "2024" },
+      { type: "education", title: "Consultas Básicas", institution: "Desafío Latam", date: "2023" },
+      { type: "education", title: "Desarrollo Web | Javascript | ReactJs", institution: "CoderHouse", date: "2021" },
+    ],
+  },
 };
 
 export default function NierCards() {
   const [hovered, setHovered] = useState<number | null>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [sectionReady, setSectionReady] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+          setSectionReady(true);
+        } else {
+          setSectionReady(false);
+        }
+      },
+      { threshold: 0.6 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const handleModalClose = () => {
     setActiveModal(null);
@@ -160,8 +175,27 @@ export default function NierCards() {
 
   return (
     <>
-      <div className="flex items-center justify-center min-h-screen px-8">
-        <div className="w-full max-w-4xl">
+      <div
+        id="cards-section"
+        ref={sectionRef}
+        className="flex items-center justify-center min-h-screen px-8"
+        style={{ position: "relative" }}
+      >
+        {/* Gradient top */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "120px",
+            background: "linear-gradient(to bottom, #c8c3aa, transparent)",
+            zIndex: 2,
+            pointerEvents: "none",
+          }}
+        />
+
+        <div className="w-full max-w-4xl" style={{ position: "relative", zIndex: 3 }}>
           <div
             className="grid grid-cols-2 max-xs:grid-cols-1"
             style={{ fontFamily: "'Share Tech Mono', 'Courier New', monospace" }}
@@ -170,6 +204,7 @@ export default function NierCards() {
               <div
                 key={card.number}
                 onMouseEnter={() => {
+                  if (!sectionReady) return;
                   setHovered(i);
                   setActiveModal(card.number);
                 }}
@@ -255,10 +290,12 @@ export default function NierCards() {
         </div>
       </div>
 
-      <ModalComponent
-        card={activeModal ? modalData[activeModal] : null}
-        onClose={handleModalClose}
-      />
+      {sectionReady && (
+        <ModalComponent
+          card={activeModal ? modalData[activeModal] : null}
+          onClose={handleModalClose}
+        />
+      )}
     </>
   );
 }
