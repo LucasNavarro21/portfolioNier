@@ -10,12 +10,40 @@ type ContentItem =
   | { type: "bullet"; text: string }
   | { type: "education"; title: string; institution: string; date: string };
 
+// Configuración de responsive para cada breakpoint
+const responsiveConfig = {
+  mobile: {
+    padding: "0.9rem 0.7rem",
+    minHeight: "100px",
+    numberSize: "7px",
+    iconSize: "w-5 h-5",
+    titleSize: "10px",
+    arrowSize: "9px",
+  },
+  tablet: {
+    padding: "1.6rem 1.2rem",
+    minHeight: "150px",
+    numberSize: "8px",
+    iconSize: "w-6 h-6",
+    titleSize: "12px",
+    arrowSize: "10px",
+  },
+  desktop: {
+    padding: "2.4rem 1.8rem",
+    minHeight: "220px",
+    numberSize: "10px",
+    iconSize: "w-7 h-7",
+    titleSize: "15px",
+    arrowSize: "11px",
+  },
+};
+
 const cards = [
   {
     number: "01",
     title: "Experiencia",
-    icon: (
-      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+    icon: (size: string) => (
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className={size}>
         <rect x="4" y="6" width="20" height="16" stroke="currentColor" strokeWidth="1.2"/>
         <line x1="8" y1="11" x2="20" y2="11" stroke="currentColor" strokeWidth="1.2"/>
         <line x1="8" y1="15" x2="16" y2="15" stroke="currentColor" strokeWidth="1.2"/>
@@ -27,8 +55,8 @@ const cards = [
   {
     number: "02",
     title: "Proyectos",
-    icon: (
-      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+    icon: (size: string) => (
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className={size}>
         <rect x="4" y="10" width="20" height="14" stroke="currentColor" strokeWidth="1.2"/>
         <path d="M4 10 L10 4 L24 4 L24 10" stroke="currentColor" strokeWidth="1.2"/>
         <line x1="10" y1="4" x2="10" y2="10" stroke="currentColor" strokeWidth="1.2"/>
@@ -39,8 +67,8 @@ const cards = [
   {
     number: "03",
     title: "Skills",
-    icon: (
-      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+    icon: (size: string) => (
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className={size}>
         <circle cx="14" cy="14" r="9" stroke="currentColor" strokeWidth="1.2"/>
         <circle cx="14" cy="14" r="3" stroke="currentColor" strokeWidth="1.2"/>
         <line x1="14" y1="5" x2="14" y2="8" stroke="currentColor" strokeWidth="1.2"/>
@@ -53,8 +81,8 @@ const cards = [
   {
     number: "04",
     title: "Educación",
-    icon: (
-      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+    icon: (size: string) => (
+      <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className={size}>
         <path d="M14 5 L24 10 L14 15 L4 10 Z" stroke="currentColor" strokeWidth="1.2"/>
         <path d="M8 12.5 L8 19 C8 19 11 22 14 22 C17 22 20 19 20 19 L20 12.5" stroke="currentColor" strokeWidth="1.2"/>
         <line x1="24" y1="10" x2="24" y2="17" stroke="currentColor" strokeWidth="1.2"/>
@@ -147,11 +175,29 @@ const modalData: Record<string, { number: string; title: string; content: Conten
   },
 };
 
+
 export default function NierCards() {
   const [hovered, setHovered] = useState<number | null>(null);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [sectionReady, setSectionReady] = useState(false);
+  const [deviceType, setDeviceType] = useState<"mobile" | "tablet" | "desktop">("desktop");
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setDeviceType("mobile");
+      } else if (width < 1024) {
+        setDeviceType("tablet");
+      } else {
+        setDeviceType("desktop");
+      }
+    };
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -168,17 +214,50 @@ export default function NierCards() {
     return () => observer.disconnect();
   }, []);
 
+  // Cierra modal al clickear fuera
+  useEffect(() => {
+    if (deviceType === "desktop") return;
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("[data-card]") && !target.closest("[data-modal]")) {
+        setActiveModal(null);
+        setHovered(null);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [deviceType]);
+
   const handleModalClose = () => {
     setActiveModal(null);
     setHovered(null);
   };
+
+  const handleCardInteraction = (i: number, cardNumber: string) => {
+    if (!sectionReady) return;
+    if (deviceType !== "desktop") {
+      if (activeModal === cardNumber) {
+        setActiveModal(null);
+        setHovered(null);
+      } else {
+        setHovered(i);
+        setActiveModal(cardNumber);
+      }
+    } else {
+      setHovered(i);
+      setActiveModal(cardNumber);
+    }
+  };
+
+  const config = responsiveConfig[deviceType];
+  const isMobileOrTablet = deviceType !== "desktop";
 
   return (
     <>
       <div
         id="cards-section"
         ref={sectionRef}
-        className="flex items-center justify-center min-h-screen px-8"
+        className="flex items-center justify-center min-h-screen px-4 md:px-8"
         style={{ position: "relative" }}
       >
         {/* Gradient top */}
@@ -195,7 +274,10 @@ export default function NierCards() {
           }}
         />
 
-        <div className="w-full max-w-4xl" style={{ position: "relative", zIndex: 3 }}>
+        <div 
+          className="w-full max-w-4xl md:max-w-2xl sm:max-w-sm" 
+          style={{ position: "relative", zIndex: 3 }}
+        >
           <div
             className="grid grid-cols-2 max-xs:grid-cols-1"
             style={{ fontFamily: "'Share Tech Mono', 'Courier New', monospace" }}
@@ -203,19 +285,17 @@ export default function NierCards() {
             {cards.map((card, i) => (
               <div
                 key={card.number}
-                onMouseEnter={() => {
-                  if (!sectionReady) return;
-                  setHovered(i);
-                  setActiveModal(card.number);
-                }}
+                data-card
+                onMouseEnter={() => deviceType === "desktop" && handleCardInteraction(i, card.number)}
+                onClick={() => isMobileOrTablet && handleCardInteraction(i, card.number)}
                 className="relative flex flex-col justify-between overflow-hidden cursor-pointer transition-colors duration-150"
                 style={{
                   backgroundColor: hovered === i ? "#3d3b34" : "#c8c3aa",
                   border: "1.5px solid #8a8470",
                   marginRight: i % 2 === 0 ? "-1.5px" : 0,
                   marginBottom: "-1.5px",
-                  padding: "2.4rem 1.8rem",
-                  minHeight: "220px",
+                  padding: config.padding,
+                  minHeight: config.minHeight,
                   zIndex: hovered === i ? 1 : 0,
                 }}
               >
@@ -230,33 +310,51 @@ export default function NierCards() {
 
                 {/* Number */}
                 <span
-                  className="text-[10px] tracking-widest transition-colors duration-150"
-                  style={{ color: hovered === i ? "#e8e2ce" : "#6b6757" }}
+                  style={{
+                    fontSize: config.numberSize,
+                    letterSpacing: "0.18em",
+                    color: hovered === i ? "#e8e2ce" : "#6b6757",
+                    transition: "color 0.15s ease",
+                  }}
                 >
                   {card.number}
                 </span>
 
                 {/* Icon + Title */}
                 <div
-                  className="flex items-center gap-2 mt-4 transition-colors duration-150"
-                  style={{ color: hovered === i ? "#e8e2ce" : "#3a3830" }}
+                  className="flex items-center gap-2 mt-3 transition-colors duration-150"
+                  style={{
+                    color: hovered === i ? "#e8e2ce" : "#3a3830",
+                  }}
                 >
-                  {card.icon}
-                  <span className="text-[15px] uppercase tracking-widest">
+                  <div className={config.iconSize}>
+                    {card.icon(config.iconSize)}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: config.titleSize,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.12em",
+                      lineHeight: 1.2,
+                    }}
+                  >
                     {card.title}
                   </span>
                 </div>
 
                 {/* Footer */}
                 <div
-                  className="flex justify-end mt-5 pt-3 transition-colors duration-150"
+                  className="flex justify-end transition-colors duration-150"
                   style={{
                     borderTop: `1px solid ${hovered === i ? "#5a5849" : "#b0ab97"}`,
+                    marginTop: deviceType === "mobile" ? "0.6rem" : "1.2rem",
+                    paddingTop: deviceType === "mobile" ? "0.4rem" : "0.75rem",
                   }}
                 >
                   <span
-                    className="text-[11px] transition-all duration-150"
+                    className="transition-all duration-150"
                     style={{
+                      fontSize: config.arrowSize,
                       color: hovered === i ? "#e8e2ce" : "#6b6757",
                       transform: hovered === i ? "translateX(4px)" : "translateX(0)",
                     }}
@@ -291,10 +389,12 @@ export default function NierCards() {
       </div>
 
       {sectionReady && (
-        <ModalComponent
-          card={activeModal ? modalData[activeModal] : null}
-          onClose={handleModalClose}
-        />
+        <div data-modal>
+          <ModalComponent
+            card={activeModal ? modalData[activeModal] : null}
+            onClose={handleModalClose}
+          />
+        </div>
       )}
     </>
   );
